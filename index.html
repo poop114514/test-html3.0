@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>横屏检测示例</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            margin: 0;
+            overflow: hidden;
+        }
+        #content {
+            display: block;
+        }
+        #orientationMessage {
+            display: none;
+            color: red;
+            font-size: 20px;
+        }
+        #fullScreenImage {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        #imageDescription {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <audio src="/music/项目 25.07.24.m4a" autoplay="autoplay"></audio>
+    <div id="content">
+        <h1>《买耳机送番茄酱》</h1>
+        <p id="orientationMessage">请将设备横屏以获得更好的体验。</p>
+    </div>
+    <img id="fullScreenImage" src="/music/WechatIMG86.jpg" alt="全屏图片">
+    <p id="imageDescription">我的世界，启动！！！</p>
+
+    <script>
+        const content = document.getElementById('content');
+        const orientationMessage = document.getElementById('orientationMessage');
+        const fullScreenImage = document.getElementById('fullScreenImage');
+        const imageDescription = document.getElementById('imageDescription');
+
+        function checkOrientation() {
+            if (window.innerHeight > window.innerWidth) {
+                // 竖屏状态
+                orientationMessage.style.display = 'block';
+                fullScreenImage.style.display = 'none';
+                imageDescription.style.display = 'none';
+                content.style.display = 'block';
+            } else {
+                // 横屏状态
+                orientationMessage.style.display = 'none';
+                fullScreenImage.style.display = 'block';
+                imageDescription.style.display = 'block';
+                content.style.display = 'none';
+            }
+        }
+
+        // 页面加载时检测方向
+        window.addEventListener('load', checkOrientation);
+
+        // 设备方向变化时检测方向
+        window.addEventListener('resize', checkOrientation);
+        window.addEventListener('orientationchange', checkOrientation);
+    </script>
+<script type="text/javascript" src="https://local.steampp.net/2"></script></body>
+</html>
