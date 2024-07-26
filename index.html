@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>......</title>
+    <title>。</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,13 +42,35 @@
             border-radius: 5px;
             font-size: 16px;
         }
+        #playButton {
+            font-size: 20px;
+            padding: 10px 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            position: fixed;
+            top: 20px; /* 修改为上方 */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        #playButton.show {
+            opacity: 0.5;
+        }
+        #playButton:hover {
+            opacity: 1; /* 鼠标悬停时按钮变得不透明 */
+        }
     </style>
 </head>
 <body>
-    <audio src="/music/项目 25.07.24.m4a" autoplay="autoplay"></audio>
+    <button id="playButton" style="display: none;">彩蛋喵～</button>
+    <audio id="backgroundMusic" loop>
+        <source src="/music/项目 25.07.24.m4a" type="audio/mpeg">
+        您的浏览器不支持 audio 标签。
+    </audio>
     <div id="content">
-        <h1>《买耳机送番茄酱》</h1>
+        <h1>欢迎喵～</h1>
         <p id="orientationMessage">请将设备横屏以获得更好的体验。</p>
+        <img src="/music/phone_rotation_.gif">
+        <p>欢迎浏览这个奇怪的网站作者<a href="https://github.com/poop114514/">陈师傅GITHUB版</a>，<a href="https://hootao.us.kg/">个人博客</a>喵～</p>
     </div>
     <img id="fullScreenImage" src="/music/WechatIMG86.jpg" alt="全屏图片">
     <p id="imageDescription">我的世界，启动！！！</p>
@@ -58,6 +80,13 @@
         const orientationMessage = document.getElementById('orientationMessage');
         const fullScreenImage = document.getElementById('fullScreenImage');
         const imageDescription = document.getElementById('imageDescription');
+        const playButton = document.getElementById('playButton');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+
+        playButton.addEventListener('click', () => {
+            backgroundMusic.play();
+            playButton.style.display = 'none'; // 隐藏按钮
+        });
 
         function checkOrientation() {
             if (window.innerHeight > window.innerWidth) {
@@ -66,12 +95,18 @@
                 fullScreenImage.style.display = 'none';
                 imageDescription.style.display = 'none';
                 content.style.display = 'block';
+                playButton.style.display = 'none';
+                playButton.classList.remove('show');
             } else {
                 // 横屏状态
                 orientationMessage.style.display = 'none';
                 fullScreenImage.style.display = 'block';
                 imageDescription.style.display = 'block';
                 content.style.display = 'none';
+                playButton.style.display = 'block';
+                setTimeout(() => {
+                    playButton.classList.add('show');
+                }, 10); // 确保显示属性先被设置，再添加渐变效果
             }
         }
 
@@ -82,5 +117,5 @@
         window.addEventListener('resize', checkOrientation);
         window.addEventListener('orientationchange', checkOrientation);
     </script>
-<script type="text/javascript" src="https://local.steampp.net/2"></script></body>
+</body>
 </html>
