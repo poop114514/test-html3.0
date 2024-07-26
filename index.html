@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>。</title>
+    <title>要这个干嘛？</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,20 +48,67 @@
             opacity: 0;
             transition: opacity 0.3s;
             position: fixed;
-            top: 20px; /* 修改为上方 */
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
+            display: none;
+            background-color: rgba(0, 0, 0, 0.1);
         }
         #playButton.show {
             opacity: 0.5;
         }
         #playButton:hover {
-            opacity: 1; /* 鼠标悬停时按钮变得不透明 */
+            opacity: 1;
+        }
+        #confirmationBox {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 400px;
+            background-color: rgba(255, 255, 255, 0.3); /* 更加透明的白色背景 */
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border: 1px solid black; /* 黑色边框 */
+        }
+        #confirmationBox.show {
+            opacity: 1;
+        }
+        #confirmationBox.hide {
+            opacity: 0;
+        }
+        #confirmationButtons button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 1px solid black; /* 黑色边框 */
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        #confirmYes {
+            background-color: rgba(0, 255, 0, 0.5); /* 半透明的绿色背景 */
+            color: black;
+        }
+        #confirmNo {
+            background-color: rgba(255, 0, 0, 0.5); /* 半透明的红色背景 */
+            color: black;
+        }
+        #confirmationButtons button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: black;
         }
     </style>
 </head>
 <body>
-    <button id="playButton" style="display: none;">彩蛋喵～</button>
+    <button id="playButton">彩蛋喵～</button>
     <audio id="backgroundMusic" loop>
         <source src="/music/项目 25.07.24.m4a" type="audio/mpeg">
         您的浏览器不支持 audio 标签。
@@ -69,53 +116,89 @@
     <div id="content">
         <h1>欢迎喵～</h1>
         <p id="orientationMessage">请将设备横屏以获得更好的体验。</p>
-        <img src="/music/phone_rotation_.gif">
-        <p>欢迎浏览这个奇怪的网站作者<a href="https://github.com/poop114514/">陈师傅GITHUB版</a>，<a href="https://hootao.us.kg/">个人博客</a>喵～</p>
+        <img src="/music/phone_rotation_.gif" alt="请横屏">
+        <p>欢迎浏览这个奇怪的网站，作者<a href="https://github.com/poop114514/">陈师傅GITHUB版</a>，<a href="https://hootao.us.kg/">个人博客</a>喵～</p>
     </div>
     <img id="fullScreenImage" src="/music/WechatIMG86.jpg" alt="全屏图片">
     <p id="imageDescription">我的世界，启动！！！</p>
 
+    <div id="confirmationBox">
+        <h3>这是开发者最后的警告！！！</h3>
+        <p>以下音频可能引起不必要的麻烦，请问是否打开</p>
+        <div id="confirmationButtons">
+            <button id="confirmYes">好</button>
+            <button id="confirmNo">算了吧</button>
+        </div>
+    </div>
+
     <script>
-        const content = document.getElementById('content');
-        const orientationMessage = document.getElementById('orientationMessage');
-        const fullScreenImage = document.getElementById('fullScreenImage');
-        const imageDescription = document.getElementById('imageDescription');
-        const playButton = document.getElementById('playButton');
-        const backgroundMusic = document.getElementById('backgroundMusic');
+        document.addEventListener('DOMContentLoaded', () => {
+            const content = document.getElementById('content');
+            const orientationMessage = document.getElementById('orientationMessage');
+            const fullScreenImage = document.getElementById('fullScreenImage');
+            const imageDescription = document.getElementById('imageDescription');
+            const playButton = document.getElementById('playButton');
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const confirmationBox = document.getElementById('confirmationBox');
+            const confirmYes = document.getElementById('confirmYes');
+            const confirmNo = document.getElementById('confirmNo');
 
-        playButton.addEventListener('click', () => {
-            backgroundMusic.play();
-            playButton.style.display = 'none'; // 隐藏按钮
-        });
-
-        function checkOrientation() {
-            if (window.innerHeight > window.innerWidth) {
-                // 竖屏状态
-                orientationMessage.style.display = 'block';
-                fullScreenImage.style.display = 'none';
-                imageDescription.style.display = 'none';
-                content.style.display = 'block';
-                playButton.style.display = 'none';
-                playButton.classList.remove('show');
-            } else {
-                // 横屏状态
-                orientationMessage.style.display = 'none';
-                fullScreenImage.style.display = 'block';
-                imageDescription.style.display = 'block';
-                content.style.display = 'none';
-                playButton.style.display = 'block';
+            playButton.addEventListener('click', () => {
+                confirmationBox.style.display = 'block';
                 setTimeout(() => {
-                    playButton.classList.add('show');
-                }, 10); // 确保显示属性先被设置，再添加渐变效果
+                    confirmationBox.classList.add('show');
+                }, 10);
+            });
+
+            const hideConfirmationBox = () => {
+                confirmationBox.classList.remove('show');
+                setTimeout(() => {
+                    confirmationBox.style.display = 'none';
+                }, 300);
+            };
+
+            confirmYes.addEventListener('click', () => {
+                backgroundMusic.play();
+                hideConfirmationBox();
+                setTimeout(() => {
+                    playButton.style.display = 'none';
+                }, 300);
+            });
+
+            confirmNo.addEventListener('click', () => {
+                hideConfirmationBox();
+            });
+
+            function checkOrientation() {
+                if (window.innerHeight > window.innerWidth) {
+                    // 竖屏状态
+                    orientationMessage.style.display = 'block';
+                    fullScreenImage.style.display = 'none';
+                    imageDescription.style.display = 'none';
+                    content.style.display = 'block';
+                    playButton.style.display = 'none';
+                    playButton.classList.remove('show');
+                    hideConfirmationBox(); // 横屏时隐藏确认窗口
+                } else {
+                    // 横屏状态
+                    orientationMessage.style.display = 'none';
+                    fullScreenImage.style.display = 'block';
+                    imageDescription.style.display = 'block';
+                    content.style.display = 'none';
+                    playButton.style.display = 'block';
+                    setTimeout(() => {
+                        playButton.classList.add('show');
+                    }, 10);
+                }
             }
-        }
 
-        // 页面加载时检测方向
-        window.addEventListener('load', checkOrientation);
+            // 页面加载时检测方向
+            checkOrientation();
 
-        // 设备方向变化时检测方向
-        window.addEventListener('resize', checkOrientation);
-        window.addEventListener('orientationchange', checkOrientation);
+            // 设备方向变化时检测方向
+            window.addEventListener('resize', checkOrientation);
+            window.addEventListener('orientationchange', checkOrientation);
+        });
     </script>
 </body>
 </html>
